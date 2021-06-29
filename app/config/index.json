@@ -6,6 +6,6 @@
         "database": "chat"
     },
     "app": {
-        "PORT": "5050"
+        "PORT": "3001"
     }
 }
