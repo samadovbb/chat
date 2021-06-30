@@ -1,11 +1,11 @@
 {
     "db": {
-        "host": "45.12.212.172",
+        "host": "localhost",
         "username": "root",
-        "password": "@12345",
+        "password": "@Aa12345",
         "database": "chat"
     },
     "app": {
-        "PORT": "3001"
+        "PORT": "8080"
     }
 }

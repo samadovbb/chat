@@ -6,7 +6,7 @@ let query = async(sql, data) => {
         let d = await db.query(sql, data);
         return d[0];
     } catch (err) {
-        console.log(chalk.red(`EDB: ./app/database/db.fun.js \n${n}`));
+        console.log(chalk.red(`EDB: ./app/database/db.fun.js \n${err}`));
         return { err: 1, errdata: err };
     }
 }

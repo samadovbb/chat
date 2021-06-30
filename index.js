@@ -2,35 +2,40 @@ const server = require('http').createServer();
 // socket io connect .....
 const io = require('socket.io')(server, {
     cors: {
-        origin: '*'
-    }
+        origin: "https://socketserve.io",
+        methods: ["GET", "POST", "OPTIONS"],
+        allowedHeaders: ["my-custom-header"],
+        credentials: true
+    },
+    allowEIO3: true
 })
 
 const config = require("./app/config/index.json").app
-const chalk = require('chalk');
 const PORT = config.PORT || 5050
 
-// parse application/x-www-form-urlencoded and parse application ... and public .... and file yuklash ... and ejs ....
-//app.use(express.urlencoded({ extended: false })).use(express.json()).use(express.static('public'))
-const { AuthUsers } = require("./app/func/func.auth")
+const { authUsers, phoneNumber, checkCode } = require("./app/func/func.auth")
 
 io.on('connection', (socket) => {
+
     let hash = socket.handshake.query.hash
+    var clientIp = socket.request.connection.remoteAddress;
 
     // is AuthUsers ...
-    if (AuthUsers(hash)) {
-        socket.on('disconnect', () => {
-            console.log('user disconnected');
-        });
+    if (authUsers(hash, clientIp)) {
+        //code.... 
     } else {
-        console.log(hash)
-        io.emit("error", "hi")
+        //err notHashCode emit message ...
+        io.emit("err show", { message: "Not users ..", status: 400 });
+        //socket on phone number ...
+        socket.on("set phoneNumber", (data) => { phoneNumber(io, data, clientIp); });
+        //socket on check code ...
+        socket.on("set checkCode", (data) => { checkCode(io, data, clientIp); });
     }
 
 });
 
 
-// create app ; 
+// create app ;  
 server.listen(PORT, () => {
     console.log(`Server ready. Port: ${PORT}`)
 })
