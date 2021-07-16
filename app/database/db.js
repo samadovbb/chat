@@ -1,5 +1,5 @@
 const mysql = require("mysql2")
-const config = require("../config/index.json").db
+const config = require("../../config.json").db
 
 module.exports = mysql.createPool({
     host: config.host,

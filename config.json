@@ -1,11 +1,11 @@
 {
+    "app": {
+        "port": "8080"
+    },
     "db": {
         "host": "localhost",
         "username": "root",
         "password": "@Aa12345",
         "database": "chat"
-    },
-    "app": {
-        "PORT": "8080"
     }
 }

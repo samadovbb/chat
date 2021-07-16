@@ -1,41 +1,16 @@
-const server = require('http').createServer();
-// socket io connect .....
-const io = require('socket.io')(server, {
-    cors: {
-        origin: "https://socketserve.io",
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
-    },
-    allowEIO3: true
-})
+const express = require("express");
+const app = express();
+const config = require("./config.json");
 
-const config = require("./app/config/index.json").app
-const PORT = config.PORT || 5050
+// get port config.json ..
+const PORT = config.app.port;
 
-const { authUsers, phoneNumber, checkCode } = require("./app/func/func.auth")
+// app.use all ...
+app.use(express.urlencoded({ extended: false })).use(express.json()).set('view engine', 'ejs').use(express.static('public'));
 
-io.on('connection', (socket) => {
+// router app
+app.use("/api", require("./app"));
 
-    let hash = socket.handshake.query.hash
-    var clientIp = socket.request.connection.remoteAddress;
-
-    // is AuthUsers ...
-    if (authUsers(hash, clientIp)) {
-        //code.... 
-    } else {
-        //err notHashCode emit message ...
-        io.emit("err show", { message: "Not users ..", status: 400 });
-        //socket on phone number ...
-        socket.on("set phoneNumber", (data) => { phoneNumber(io, data, clientIp); });
-        //socket on check code ...
-        socket.on("set checkCode", (data) => { checkCode(io, data, clientIp); });
-    }
-
-});
-
-
-// create app ;  
-server.listen(PORT, () => {
-    console.log(`Server ready. Port: ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Create server http://localhost:${PORT}  `);
 })
